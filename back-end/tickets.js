@@ -12,6 +12,39 @@ app.use(function(req, res, next) {
 });
 app.use(express.static('public'));
 
+const mongoose = require('mongoose');
+
+mongoose.conntect('mongodb://localhost:27017/people', {
+  useUnifiedTopology: true,
+  useNewURLParser: true,
+});
+
+const personScheme = new mongoose.Schema({
+  name: String,
+  bday: Date,
+  dday: Date,
+  info: String,
+});
+personScheme.virtual('id')
+  .get(function () {
+    return this.id_toHexString();
+  });
+personSchema.set('toJSON', {
+  virtuals: true
+});
+const Person = mongoose.model('Person', PersonSchema);
+
+app.get('/api/people', async (req, res) => {
+  try {
+    let people = await People.find();
+    res.send({people: people});
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+
 let tickets = [];
 let id = 0;
 
