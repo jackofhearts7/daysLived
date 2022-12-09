@@ -4,22 +4,24 @@ import './App.css';
 import Match from './Match.js';
 
 function App() {
-  const [person, setPersons] = useState([]);
+  //const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState([{id:"123", _id: "123", name: "j", birth: "2000-02-19", death: "2100-02-19", daysLived: "36500", link: "http://jlyonj.org"  }]);
+
   const [error, setError] = useState("");
   const [userBDay, setUserBDay] = useState("");
   const [update, setUpdate] = useState(true);
-
+  
   const fetchPersons = async() => {
     try {
       const response = await axios.get("/api/persons");
-      setPersons(response.data);
+      setPersons(response.data)
     } catch(error) {
       setError("error retrieving persons" + error);
-  }
-  setUpdate(true);
+    }
+    setUpdate(true);
   }
 
-  const updatePeople = async() => {
+  const updatePersons = async() => {
     setUpdate(true);
   }
 
@@ -32,33 +34,36 @@ function App() {
       fetchPersons();
     }
   },[update]);
+  
+  //const setUserBDday = async() => {
+    
+  //}
+  
+  
+  
 
 return (
   <div className = "App">
     {error}
     <h1>Your daysLived Celebrity Match!</h1>
-    <form onSubmit={userBDay}>
       <div>
         <label>
           Your Date of Birth(DOB):
           <input type="date" value={userBDay} onChange={e => setUserBDay(e.target.value)}/>
         </label>
       </div>
-  </form>
 
-
-
-    <h1>Celebrities Days Lived</h1>
-    <div key={person.id} className="person">
+  <h1>Celebrities Days Lived</h1>
+    
+    {persons.map( person => (
+      <div key = {person.id} className="person">
         {person.name}, {person.daysLived}, {person.link}
-    </div>
+      </div>
+    ))}
+
   </div>
 
-
-
-
-
-)
-
-  }
+);
+}
+  
   export default App;
