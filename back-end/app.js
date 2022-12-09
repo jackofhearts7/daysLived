@@ -60,6 +60,16 @@ app.get('/api/persons', async (req, res) => {
   }
 });
 
+app.get('/api/persons/:id', async (req, res) => {
+  try {
+    let person = await personModel.find({_id: req.params.id});
+    res.send({person: person});
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 app.post('/api/persons', async (req, res) => {
   //console.log('req.body.birth = ' + req.body.birth);
   //console.log('req.body.death = ' + req.body.death);
@@ -119,4 +129,4 @@ app.put('/api/persons/:id', async (req, res) => {
   }
 });
 
-app.listen( 8080, () => console.log('Server listening on port 8080.'));
+app.listen( 3000, () => console.log('Server listening on port 3000.'));
