@@ -61,14 +61,14 @@ app.get('/api/persons', async (req, res) => {
 });
 
 app.post('/api/persons', async (req, res) => {
-  console.log('req.body.birth = ' + req.body.birth);
-  console.log('req.body.death = ' + req.body.death);
+  //console.log('req.body.birth = ' + req.body.birth);
+  //console.log('req.body.death = ' + req.body.death);
   const birth = new Date(req.body.birth);
-  console.log('birth = ' + birth);
+  //console.log('birth = ' + birth);
   const death = new Date(req.body.death);
-  console.log('death = ' + death);
+  //console.log('death = ' + death);
   const daysLived = ((death - birth) / (1000 * 60 * 60 * 24));
-  console.log('daysLived = ' + daysLived);
+  //console.log('daysLived = ' + daysLived);
   const person = new personModel({
     name: req.body.name,
     birth: req.body.birth,
@@ -98,7 +98,25 @@ app.delete('/api/persons/:id', async (req, res) => {
 });
 
 app.put('/api/persons/:id', async (req, res) => {
-  
+  try {
+    const birth = new Date(req.body.birth);
+    //console.log('birth = ' + birth);
+    const death = new Date(req.body.death);
+    //console.log('death = ' + death);
+    const daysLived = ((death - birth) / (1000 * 60 * 60 * 24));
+    
+    await personModel.updateOne({_id: req.params.id},{
+      name: req.body.name,
+      birth: req.body.birth,
+      death: req.body.death,
+      daysLived: daysLived,
+      link: req.body.link
+    });
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);    
+  }
 });
 
 app.listen( 3000, () => console.log('Server listening on port 3000.'));
